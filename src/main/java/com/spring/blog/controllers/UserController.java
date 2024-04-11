@@ -3,13 +3,12 @@ package com.spring.blog.controllers;
 import com.spring.blog.payloads.ApiResponse;
 import com.spring.blog.payloads.UserDto;
 import com.spring.blog.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -19,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<UserDto> createNewUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createNewUser(@Valid @RequestBody UserDto userDto){
         UserDto createNewUserDto = this.userService.createNewUser(userDto);
         return new ResponseEntity<>(createNewUserDto, HttpStatus.CREATED);
     }
