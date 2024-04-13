@@ -40,15 +40,12 @@ public class UserController {
     @PutMapping("/users/{userId}")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable("userId") int userId){
         UserDto updatedUser = this.userService.updateUser(userDto, userId);
-        // return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") int id){
         this.userService.deleteUser(id);
-//        return new ResponseEntity<> (Map.of("message", "User deleted successfully"), HttpStatus.OK);
-
         return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
     }
 
