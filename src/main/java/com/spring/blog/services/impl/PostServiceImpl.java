@@ -11,6 +11,7 @@ import com.spring.blog.payloads.UserDto;
 import com.spring.blog.repositories.CategoryRepository;
 import com.spring.blog.repositories.PostRepository;
 import com.spring.blog.repositories.UserRepository;
+import com.spring.blog.services.FileService;
 import com.spring.blog.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -20,7 +21,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,6 +41,8 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private FileService fileService;
 
     @Override
     public PostDto createNewPost(PostDto postDto, Integer userId, Integer categoryId) {
@@ -143,5 +148,16 @@ public class PostServiceImpl implements PostService {
                 .replaceAll("[^a-z0-9\\s]", "") // Remove special characters except spaces
                 .trim() // Remove leading and trailing spaces
                 .replaceAll("\\s+", "-"); // Replace spaces with hyphens
+    }
+
+    @Override
+    public PostDto uploadImage(Integer postId, MultipartFile image) throws IOException {
+        String imageFile = this.fileService.uploadImageFile(image);
+        Post post = this.postRepository.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("Post", "Post Id", postId));
+        post.setImage(imageFile);
+        Post fileUploaded = this.postRepository.save(post);
+
+        return this.modelMapper.map(fileUploaded, PostDto.class);
     }
 }
