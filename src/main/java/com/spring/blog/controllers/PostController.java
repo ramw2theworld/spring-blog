@@ -4,12 +4,15 @@ import com.spring.blog.configs.AppConstants;
 import com.spring.blog.payloads.ApiResponse;
 import com.spring.blog.payloads.PostDto;
 import com.spring.blog.payloads.PostResponse;
+import com.spring.blog.services.FileService;
 import com.spring.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,9 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
+    @Autowired
+    private FileService fileService;
+
     @PostMapping("/posts/{userId}/{categoryId}")
     public ResponseEntity<PostDto> createNewPost(@RequestBody PostDto postDto, @PathVariable int userId, @PathVariable int categoryId){
         PostDto newPostDto = this.postService.createNewPost(postDto, userId, categoryId);
@@ -63,5 +69,11 @@ public class PostController {
     public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
         PostDto postDto1= this.postService.updatePost(postDto, postId);
         return new ResponseEntity<PostDto>(postDto1, HttpStatus.OK);
+    }
+
+    @PostMapping("/posts/{postId}/image-upload")
+    public ResponseEntity<PostDto> uploadImageFile(@PathVariable Integer postId, @RequestBody MultipartFile image) throws IOException {
+        PostDto fileUploaded = this.postService.uploadImage(postId, image);
+        return new ResponseEntity<PostDto>(fileUploaded, HttpStatus.OK);
     }
 }

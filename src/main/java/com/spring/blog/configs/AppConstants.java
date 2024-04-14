@@ -7,5 +7,6 @@ public class AppConstants {
     public static final String SORT_DIR="ASC";
 
     public static final String KEYWORDS="";
+    public static final String FILE_PATH="images";
 
 }
