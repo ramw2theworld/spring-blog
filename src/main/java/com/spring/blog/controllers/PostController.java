@@ -2,6 +2,7 @@ package com.spring.blog.controllers;
 
 import com.spring.blog.payloads.ApiResponse;
 import com.spring.blog.payloads.PostDto;
+import com.spring.blog.payloads.PostResponse;
 import com.spring.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,15 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> fetchAllPosts(){
-        List<PostDto> posts = this.postService.fetchAllPosts();
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<PostResponse> fetchAllPosts(
+            @RequestParam(value = "page-number", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "page-size", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sort-by", defaultValue = "id", required = false) String sort_by,
+            @RequestParam(value = "sort-dir", defaultValue = "ASC", required = false) String sort_dir,
+            @RequestParam(value = "search-keyword", defaultValue = "", required = false) String search_keyword
+    ){
+        PostResponse postResponse = this.postService.fetchAllPosts(pageNumber, pageSize, sort_by, sort_dir, search_keyword);
+        return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
     @GetMapping("/posts-by-category/{categoryId}")
