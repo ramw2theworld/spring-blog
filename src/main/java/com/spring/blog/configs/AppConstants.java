@@ -6,4 +6,6 @@ public class AppConstants {
     public static final String SORT_BY="id";
     public static final String SORT_DIR="ASC";
 
+    public static final String KEYWORDS="";
+
 }
