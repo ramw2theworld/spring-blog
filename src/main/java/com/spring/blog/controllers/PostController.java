@@ -1,5 +1,6 @@
 package com.spring.blog.controllers;
 
+import com.spring.blog.configs.AppConstants;
 import com.spring.blog.payloads.ApiResponse;
 import com.spring.blog.payloads.PostDto;
 import com.spring.blog.payloads.PostResponse;
@@ -24,10 +25,10 @@ public class PostController {
 
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> fetchAllPosts(
-            @RequestParam(value = "page-number", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "page-size", defaultValue = "10", required = false) Integer pageSize,
-            @RequestParam(value = "sort-by", defaultValue = "id", required = false) String sort_by,
-            @RequestParam(value = "sort-dir", defaultValue = "ASC", required = false) String sort_dir,
+            @RequestParam(value = "page-number", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "page-size", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sort-by", defaultValue = AppConstants.SORT_BY, required = false) String sort_by,
+            @RequestParam(value = "sort-dir", defaultValue = AppConstants.SORT_DIR, required = false) String sort_dir,
             @RequestParam(value = "search-keyword", defaultValue = "", required = false) String search_keyword
     ){
         PostResponse postResponse = this.postService.fetchAllPosts(pageNumber, pageSize, sort_by, sort_dir, search_keyword);
